@@ -58,6 +58,5 @@ end
 
 LPH_CRASH = function(...)
     assert(#{...} == 0, "LPH_CRASH does not accept any arguments.")
-    game:Shutdown()
     while true do end
 end
