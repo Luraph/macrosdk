@@ -1,46 +1,113 @@
--- should only be used in **unobfuscated scripts!**
--- will also perform basic runtime validation on script arguments
+if not LPH_OBFUSCATED then
 
-local assert = assert
-local type = type
-local setfenv = setfenv
+    -- Macros:
 
-LPH_ENCNUM = function(toEncrypt, ...)
-    assert(type(toEncrypt) == "number" and #{...} == 0, "LPH_ENCNUM only accepts a single constant double or integer as an argument.")
-    return toEncrypt
-end
-LPH_NUMENC = LPH_ENCNUM
+    LPH_ENCSTR = function(n) return n end
+    LPH_ENCBUF = function(n) return n end
+    LPH_ENCNUM = function(n) return n end
 
-LPH_ENCSTR = function(toEncrypt, ...)
-    assert(type(toEncrypt) == "string" and #{...} == 0, "LPH_ENCSTR only accepts a single constant string as an argument.")
-    return toEncrypt
-end
-LPH_STRENC = LPH_ENCSTR
+    LPH_STRENC = function(n) return n end
+    LPH_BUFENC = function(n) return n end
+    LPH_NUMENC = function(n) return n end
 
-LPH_ENCFUNC = function(toEncrypt, encKey, decKey, ...)
-    -- not checking decKey value since this shim is meant to be used without obfuscation/whitelisting
-    assert(type(toEncrypt) == "function" and type(encKey) == "string" and #{...} == 0, "LPH_ENCFUNC accepts a constant function, constant string, and string variable as arguments.")
-    return toEncrypt
-end
-LPH_FUNCENC = LPH_ENCFUNC
+    LPH_CRASH = function() end
 
-LPH_JIT = function(f, ...)
-    assert(type(f) == "function" and #{...} == 0, "LPH_JIT only accepts a single constant function as an argument.")
-    return f
-end
-LPH_JIT_MAX = LPH_JIT
+    do
 
-LPH_NO_VIRTUALIZE = function(f, ...)
-    assert(type(f) == "function" and #{...} == 0, "LPH_NO_VIRTUALIZE only accepts a single constant function as an argument.")
-    return f
-end
+        local table_unpack = table.unpack or unpack
+        local table_pack = table.pack or function(...) return { n = select("#", ...), ... } end
 
-LPH_NO_UPVALUES = function(f, ...)
-    assert(type(setfenv) == "function", "LPH_NO_UPVALUES can only be used on Lua versions with getfenv & setfenv")
-    assert(type(f) == "function" and #{...} == 0, "LPH_NO_UPVALUES only accepts a single constant function as an argument.")
-    return f
-end
+        local __stackalloc = { }
+        __stackalloc.__index = __stackalloc
 
-LPH_CRASH = function(...)
-    assert(#{...} == 0, "LPH_CRASH does not accept any arguments.")
+        __stackalloc.clear = function(self, first, last) 
+
+            first = first or self.__base
+            last = last or self.__end
+            
+            for i = first, last do self[i] = nil end 
+
+        end
+
+        __stackalloc.unpack = function(self, first, last) 
+
+            first = first or self.__base
+            last = last or self.__end
+            
+            return table_unpack(self, first, last) 
+        
+        end
+
+        __stackalloc.pack = function(self, first, last) 
+            
+            first = first or self.__base
+            last = last or self.__end
+
+            return table_pack(table_unpack(self, first, last))
+        
+        end
+        
+        __stackalloc.__len = function(self) return self.__size end
+        
+        LPH_STACKALLOC = function(size, base)
+
+            base = base or 0
+
+            local allocation = { }
+            allocation.__size = size
+            allocation.__base = base
+            allocation.__end = base + size - 1
+
+            return setmetatable(allocation, __stackalloc)
+
+        end
+
+    end
+
+    LPH_PRECHECK = function(check) check() end
+
+    LPH_REWRITE = function(e) return e end
+
+    -- Attributes:
+
+    local __attribute = function() end
+
+    LPH_ATTRIBUTES = __attribute
+
+    ENCRYPT = __attribute
+
+    VM = __attribute
+    PRESET = __attribute
+    OPTIMIZE = __attribute
+    NO_UPVALUES = __attribute
+    ERROR_HANDLING = __attribute
+
+    UNROLL = __attribute
+    INLINE = __attribute
+
+    TRANSFORM = __attribute
+
+    -- VM Options:
+
+    NONE = __attribute
+    OPAL = __attribute
+    ONYX = __attribute
+
+    -- PRESET Options:
+
+    FAST = __attribute
+    BALANCED = __attribute
+    SECURE = __attribute
+
+    -- TRANSFORM Options:
+
+    EXTRACT = __attribute
+    CONTROL_FLOW = __attribute
+    REWRITE_NAMECALLS = __attribute
+
+    -- EXTRACT Options:
+
+    GLOBALS = __attribute
+    CONSTANTS = __attribute
+
 end
