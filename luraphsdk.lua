@@ -3,13 +3,20 @@ if not LPH_OBFUSCATED then
     -- Macros:
 
     LPH_ENCSTR = function(n) return n end
-    LPH_ENCBUF = function(n) return n end
     LPH_ENCNUM = function(n) return n end
 
     LPH_STRENC = function(n) return n end
-    LPH_BUFENC = function(n) return n end
     LPH_NUMENC = function(n) return n end
 
+    if buffer then
+
+        local buffer_fromstring = buffer.fromstring
+        
+        LPH_ENCBUF = function(n) return buffer_fromstring(n) end
+        LPH_BUFENC = function(n) return buffer_fromstring(n) end
+        
+    end
+     
     LPH_CRASH = function() end
 
     do
