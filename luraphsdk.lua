@@ -6,9 +6,9 @@ if not LPH_OBFUSCATED then
     LPH_ENCBUF = function(n) return n end
     LPH_ENCNUM = function(n) return n end
 
-    LPH_STRENC = LPH_ENCSTR
-    LPH_BUFENC = LPH_ENCBUF
-    LPH_NUMENC = LPH_ENCNUM
+    LPH_STRENC = function(n) return n end
+    LPH_BUFENC = function(n) return n end
+    LPH_NUMENC = function(n) return n end
 
     LPH_CRASH = function() end
 
