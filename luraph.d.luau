@@ -11,20 +11,22 @@ export type StackAllocation<T = any> =
 
 -- Callable Macros ------------------------------------------------------------
 
-declare function LPH_ENCSTR(toEncrypt: string, key: (string | number)?, keyExpression: any?): string
-declare function LPH_STRENC(toEncrypt: string, key: (string | number)?, keyExpression: any?): string
+declare LPH_ENCSTR: ((toEncrypt: string) -> string) & ((toEncrypt: string, key: (number | string), expression: any) -> string)
+declare LPH_STRENC: typeof(LPH_ENCSTR)
 
-declare function LPH_ENCBUF(toEncrypt: string, key: (string | number)?, keyExpression: any?): buffer
-declare function LPH_BUFENC(toEncrypt: string, key: (string | number)?, keyExpression: any?): buffer
+declare LPH_ENCBUF: ((toEncrypt: string) -> buffer) & ((toEncrypt: string, key: (number | string), expression: any) -> buffer)
+declare LPH_BUFENC: typeof(LPH_ENCBUF)
 
-declare function LPH_ENCNUM(toEncrypt: number, keyTable: { [any]: number }?): number
-declare function LPH_NUMENC(toEncrypt: number, keyTable: { [any]: number }?): number
+declare LPH_ENCNUM: ((toEncrypt: number) -> number) & ((toEncrypt: number, keyTable: { [any]: number }) -> number)
+declare LPH_NUMENC: typeof(LPH_ENCNUM)
 
 declare function LPH_CRASH(): ()
 
 declare function LPH_STACKALLOC(size: number, indexBase: number?): StackAllocation<any>
 
 declare function LPH_PRECHECK(check: () -> (number | { number }), expectedKey: number | { number }): ()
+
+declare function LPH_REWRITE(expression: number, options: (string | { preset: string?, budget: string?, context: { any }? })?): number
 
 -- Value Macros ---------------------------------------------------------------
 
@@ -36,18 +38,18 @@ declare LPH_VERSION: number
 
 export type LuraphAttribute = any
 
-export type VM = { read __vm: never }
-export type Preset = { read __preset: never }
-export type Transform = { read __transform: never }
-export type ExtractTarget = { read __extractTarget: never }
-                    
+export type VM = any
+export type Preset = any
+export type Transform = any
+export type ExtractTarget = any
+
 declare FAST: Preset
 declare BALANCED: Preset
 declare SECURE: Preset
 
-declare NONE: VMKind
-declare OPAL: VMKind
-declare ONYX: VMKind
+declare NONE: VM
+declare OPAL: VM
+declare ONYX: VM
 
 declare EXTRACT: Transform & ((...ExtractTarget) -> Transform)
 
