@@ -58,7 +58,7 @@ if not LPH_OBFUSCATED then
         
         LPH_STACKALLOC = function(size, base)
 
-            base = base or 0
+            base = base or 1
 
             local allocation = { }
             allocation.__size = size
