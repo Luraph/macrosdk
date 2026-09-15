@@ -41,6 +41,23 @@ if not LPH_OBFUSCATED then
     end)
 end
 ```
+#### Luvit (**with built in libraries**)
+```lua
+local https = require("https")
+local timer = require("timer")
+local MacroString = nil
+https.get("https://raw.githubusercontent.com/Luraph/macrosdk/main/luraphsdk.lua", function(Response)
+  local Body = {}
+  Response:on("data", function(Chunk)
+    Body[#Body+1] = Chunk
+  end)
+  Response:on("end", function()
+    MacroString = table.concat(Body)
+  end)
+end)
+repeat timer.sleep(1) until MacroString
+loadstring(MacroString)()
+```
 
 ## Help! I don't see any examples for my platform here!
 
