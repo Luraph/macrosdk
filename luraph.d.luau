@@ -28,6 +28,8 @@ declare function LPH_PRECHECK(check: () -> (number | { number }), expectedKey: n
 
 declare function LPH_REWRITE(expression: number, options: (string | { preset: string?, budget: string?, context: { any }? })?): number
 
+declare function LPH_ASSUME<T>(expression: T, expected: T): T
+
 -- Value Macros ---------------------------------------------------------------
 
 declare LPH_OBFUSCATED: boolean
