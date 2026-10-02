@@ -74,6 +74,7 @@ if not LPH_OBFUSCATED then
     LPH_PRECHECK = function(check) check() end
 
     LPH_REWRITE = function(e) return e end
+    LPH_ASSUME = function(e) return e end
 
     -- Attributes:
 
