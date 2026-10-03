@@ -30,6 +30,8 @@ declare function LPH_REWRITE(expression: number, options: (string | { preset: st
 
 declare function LPH_ASSUME<T>(expression: T, expected: T): T
 
+declare function LPH_OPAQUE(value: true | false): boolean
+
 -- Value Macros ---------------------------------------------------------------
 
 declare LPH_OBFUSCATED: boolean
