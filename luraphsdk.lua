@@ -90,6 +90,7 @@ if not LPH_OBFUSCATED then
     OPTIMIZE = __attribute
     NO_UPVALUES = __attribute
     ERROR_HANDLING = __attribute
+    UNSAFE_ENVIRONMENT = __attribute
 
     UNROLL = __attribute
     INLINE = __attribute
